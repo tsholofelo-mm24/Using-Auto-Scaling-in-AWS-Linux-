@@ -1,4 +1,4 @@
-<img width="508" height="221" alt="image" src="https://github.com/user-attachments/assets/5bfd2b84-effc-4fb9-ae42-94ac13242dc8" /># Using Auto Scaling In AWS Linux
+# Using Auto Scaling In AWS Linux
 
 Using simple commands with the AWS CLI, you first create a virtual server (EC2 instance) to run a web server. Then, you make a reusable copy of that server, called an AMI. This copy is used to automatically launch more servers when needed, using a feature called Auto Scaling, which adds or removes servers based on traffic. To keep everything running smoothly, a Load Balancer is set up to share the traffic evenly across all servers, even if they’re in different locations.
 
