@@ -467,14 +467,152 @@ Once the target group has been created successfully, close the Target groups bro
 
 **Creating a launch template**
 
+2.13  On the EC2 Management Console, in the left navigation pane, locate the **Instances** section, and choose **Launch Templates**.
+
+2.14 Choose Create launch template.
+
+2.15 On the Create launch template page, in the Launch template name and description section, configure the following options:
+
+   * For **Launch template name - required**, enter _web-app-launch-template_
+
+   * For **Template version description**, enter _A web server for the load test app_
+
+   * For **Auto Scaling guidance**, select  **Provide guidance to help me set up a template that I can use with EC2 Auto Scaling**.
+
+2.16 In the **Application and OS Images (Amazon Machine Image) - required** section, choose the **My AMIs** tab. 
+
+Notice that **WebServerAMI** is already chosen.
+
+2.16 In the **Instance type** section, choose the **Instance type** dropdown list, and choose **t3.micro**.
+
+2.17 In the **Key pair (login)** section, confirm that the **Key pair name** dropdown list is set to **Don't include in launch template**.
+
+ _Amazon EC2 uses public key cryptography to encrypt and decrypt login information. To log in to your instance, you must create a key pair, specify the name of the key pair when you launch the instance, and provide the private key when you connect to the instance._
+
+ 2.18 In the **Network settings** section, choose the **Security groups** dropdown list, and choose **HTTPAccess**.
+
+When you launch an instance, you can pass user data to the instance. The data can be used to run configuration tasks and scripts.
+
+2.19 Choose **Create launch template**.
+
+You should receive a message similar to the following:
+
+_Successfully created web-app-launch-template._
+
+* Note: In this lab, you do not need to connect to the instance.
+
+2.20 Choose View launch templates.
+
+
+**Creating anAuto Scaling Group**
+
+2.21 Choose  **web-app-launch-template**, and then from the Actions  dropdown list, choose **Create Auto Scaling group**.
+
+2.12 On the **Choose launch template or configuration** page, in the **Name** section, for **Auto Scaling group name**, enter _Web App Auto Scaling Group_ > Choose **Next**
+
+2.13 On the Choose instance launch options page, in the Network section, configure the following options:
+
+  * From the **VPC** dropdown list, choose **Lab VPC**.
+
+  * From the **Availability Zones and subnets** dropdown list, choose **Private Subnet 1 (10.0.2.0/24)** and **Private Subnet 2 (10.0.4.0/24)** > Choose **Next**
+
+2.14 On the Configure advanced options – optional page, configure the following options: 
+
+   * In the **Load balancing – optional** section, choose **Attach to an existing load balancer**.
+
+   * In the **Attach to an existing load balancer** section, configure the following options:
+
+   * Choose **Choose from your load balancer target groups.**
+
+   * From the **Existing load balancer target groups** dropdown list, choose **webserver-app | HTTP.**
+
+   * In the **Health checks** section, under **Additional health check types**, select  **Turn on Elastic Load Balancing health checks.** > Choose **Next**
+
+2.15 On the **Configure group size and scaling policies – optional** page, configure the following options: 
+
+In the **Group size – optional** section, enter the following values: 
+
+  * **Desired capacity**:2
+
+  * **Minimum capacity**: 2
+    
+  * **Maximum capacity**: 4
+
+In the Scaling policies – optional section, configure the following options:
+
+Choose  **Target tracking scaling policy**.
+
+For **Metric type**, choose **Average CPU utilization**.
+
+For **Target value**, enter 50
+
+This change tells auto scaling to maintain an average CPU utilization across all instances of 50 percent. Auto scaling automatically adds or removes capacity as required to keep the metric at or close to the specified target value. It adjusts to fluctuations in the metric due to a fluctuating load pattern.
+
+2.16 Choose **Next**.
+
+2.17 On the **Add notifications – optional** page, choose **Next**.
+
+2.18 On the **Add tags – optional **page, choose **Add tag** and configure the following options:
+
+  * For **Key**, enter _Name_
+
+  * For **Value - optional**, enter _WebApp_
+
+2.19 Choose **Next**.
+
+2.20 On the **Review** page, choose **Create Auto Scaling group.**
+
+These options launch EC2 instances in private subnets across both Availability Zones.
+
+Your Auto Scaling group initially shows an Instances count of zero, but new instances will be launched to reach the desired count of two instances.
+
+Note: If you experience an error related to the t3.micro instance type not being available, then rerun this task by choosing the t2.micro instance type instead.
+
 STEP 3: VERIFYING THE AUTO SCALING CONFIGURATION
 
+3.1 In the left navigation pane, choose **Instances**.
+
+Two new instances named **WebApp** are being created as part of your Auto Scaling group. While these instances are being created, the **Status check** for these two instances is Initializing.
+
+Observe the **Status check** field for the instances until the status is 2/2 checks passed. Wait for the two new instances to complete initialization before you proceed to the next step. 
+
+You might need to choose  **Refresh** to see the updated status.
+
+3.2 Once the instances have completed initialization, in the left navigation pane in the **Load Balancing** section, choose **Target Groups**, and then select  your target group, **webserver-app**.
+
+3.3 On the **Targets** tab, verify that two instances are being created. Refresh this list until the **Health status** of these instances changes to _healthy_.
+
+   You can now test the web application by accessing it through the load balancer.
 
 STEP 4: TESTING AUTO SCALING CONFIGURATION 
 
+4.1 Open a new web browser tab, and paste the **DNS name** of the load balancer that you copied earlier into the address bar, and press Enter.
 
+4.2 On the web page, choose **Start Stress**.
 
+This step calls the application **stress** in the background, which causes the CPU utilization on the instance that serviced this request to spike to 100 percent.
 
+4.3 On the EC2 Management console, in the left navigation pane in the **Auto Scaling** section, choose **Auto Scaling Groups**.
+
+4.4 Select  **Web App Auto Scaling Group**.
+
+4.5 Choose the **Activity** tab. 
+
+After a few minutes, you should see your Auto Scaling group add a new instance. This occurs because Amazon CloudWatch detected that the average CPU utilization of your Auto Scaling group exceeded 50 percent, and your scale-up policy has been invoked in response.
+
+You can also check the new instances being launched on the EC2 Dashboard.
+
+    Well Done!! You now have successfully done the following:
+    
+    * Created an EC2 instance by using an AWS CLI command
+    
+    * Created a new AMI by using the AWS CLI
+    
+    * Created an Amazon EC2 launch template
+    
+    * Created an Amazon EC2 Auto Scaling launch configuration
+    
+    * Configured scaling policies and created an Auto Scaling group to scale in and scale out the number of servers based on variable load
 
 
 # **LAB DETAILS**
