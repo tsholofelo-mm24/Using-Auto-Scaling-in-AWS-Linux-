@@ -417,7 +417,7 @@ Your instance starts a new web server. To test that the web server was installed
 
 
 
-STEP 2: CREATING AN AUTO SCALING ENVIRONMENT
+# STEP 2: CREATING AN AUTO SCALING ENVIRONMENT
 
 **Creating an Application Load Balancer**
 
@@ -568,7 +568,7 @@ Your Auto Scaling group initially shows an Instances count of zero, but new inst
 
 Note: If you experience an error related to the t3.micro instance type not being available, then rerun this task by choosing the t2.micro instance type instead.
 
-STEP 3: VERIFYING THE AUTO SCALING CONFIGURATION
+# STEP 3: VERIFYING THE AUTO SCALING CONFIGURATION
 
 3.1 In the left navigation pane, choose **Instances**.
 
@@ -584,7 +584,7 @@ You might need to choose  **Refresh** to see the updated status.
 
    You can now test the web application by accessing it through the load balancer.
 
-STEP 4: TESTING AUTO SCALING CONFIGURATION 
+# STEP 4: TESTING AUTO SCALING CONFIGURATION 
 
 4.1 Open a new web browser tab, and paste the **DNS name** of the load balancer that you copied earlier into the address bar, and press Enter.
 
